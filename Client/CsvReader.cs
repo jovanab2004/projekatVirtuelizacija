@@ -63,12 +63,17 @@ namespace Client
             {
                 string[] parts = line.Split(',');
 
-                // Očekivani format: DateTime, Volume, CO, NO2, Pressure (+ ostale kolone)
+                if (parts.Length < 10)
+                {
+                    _logWriter.WriteLine($"[Red {rowIndex}] Nedovoljan broj kolona ({parts.Length}). Red: {line}");
+                    return null;
+                }
+
                 DateTime dateTime = DateTime.Parse(parts[0].Trim(), CultureInfo.InvariantCulture);
                 double volume = double.Parse(parts[1].Trim(), CultureInfo.InvariantCulture);
-                double co = double.Parse(parts[2].Trim(), CultureInfo.InvariantCulture);
-                double no2 = double.Parse(parts[3].Trim(), CultureInfo.InvariantCulture);
                 double pressure = double.Parse(parts[4].Trim(), CultureInfo.InvariantCulture);
+                double co = double.Parse(parts[8].Trim(), CultureInfo.InvariantCulture);
+                double no2 = double.Parse(parts[9].Trim(), CultureInfo.InvariantCulture);
 
                 if (pressure <= 0)
                 {
