@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Common
 {
@@ -18,6 +14,21 @@ namespace Common
 
         [DataMember]
         public int ExpectedSampleCount { get; set; }
+
+        [DataMember]
+        public string VolumeHeader { get; set; } = "Volume [mV]";
+
+        [DataMember]
+        public string COHeader { get; set; } = "Carbon_Monoxide [Ohms]";
+
+        [DataMember]
+        public string NO2Header { get; set; } = "Nitrogen_Dioxide [Ohms]";
+
+        [DataMember]
+        public string PressureHeader { get; set; } = "Pressure [Hectopascal]";
+
+        [DataMember]
+        public string DateTimeHeader { get; set; } = "Date time";
 
         public override string ToString()
         {

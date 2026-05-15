@@ -15,7 +15,7 @@ namespace Service
         {
             SensorEvents.OnTransferStarted += meta => Console.WriteLine($"[EVENT] Sesija pokrenuta: {meta}");
             SensorEvents.OnSampleReceived += sample => Console.WriteLine($"[EVENT] Uzorak primljen: {sample}");
-            SensorEvents.OnTransferCompleted += id => Console.WriteLine($"[EVENT] prenos završen. SessionId={id}");
+            SensorEvents.OnTransferCompleted += id => Console.WriteLine($"[EVENT] Prenos završen. SessionId={id}");
             SensorEvents.OnWarningRaised += msg => Console.WriteLine($"[UPOZORENJE] {msg}");
         }
 
@@ -32,6 +32,8 @@ namespace Service
 
             _fileManager?.Dispose();
             _fileManager = new FileManager(meta.SessionId);
+
+            Console.WriteLine($"[SESIJA] Zaglavlje: {meta.VolumeHeader} | {meta.COHeader} | {meta.NO2Header} | {meta.PressureHeader} | {meta.DateTimeHeader}");
 
             SensorEvents.RaiseTransferStarted(meta);
 
@@ -56,7 +58,7 @@ namespace Service
             if (sample.Pressure <= 0)
             {
                 SensorDatabase.Rejects.Add(sample);
-                _fileManager?.WriteReject(sample);
+                _fileManager?.WriteReject(sample, $"Nevalidan pritisak: {sample.Pressure}");
 
                 return new SampleResponse
                 {
