@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<title>Arhitektura – Kancelarijski senzor</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #fff;
+    color: #111;
+    padding: 30px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+
+  .podnaslov {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 30px;
+  }
+
+  .arch {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    margin-bottom: 36px;
+  }
+
+  .blok {
+    border: 2px solid #333;
+    border-radius: 8px;
+    width: 220px;
+    flex-shrink: 0;
+  }
+
+  .blok-naslov {
+    background: #333;
+    color: #fff;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 7px 12px;
+    border-radius: 5px 5px 0 0;
+    text-align: center;
+  }
+
+  .blok-sadrzaj {
+    padding: 10px 12px;
+    font-size: 12px;
+    line-height: 1.9;
+  }
+
+  .blok-sadrzaj div {
+    border-bottom: 1px dashed #ccc;
+    padding: 2px 0;
+  }
+
+  .blok-sadrzaj div:last-child {
+    border-bottom: none;
+  }
+
+  .strelice {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 90px;
+    flex-shrink: 0;
+    gap: 10px;
+    padding-top: 40px;
+  }
+
+  .str {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 11px;
+    color: #444;
+    gap: 2px;
+  }
+
+  .str-linija {
+    display: flex;
+    align-items: center;
+    width: 80px;
+  }
+
+  .linija {
+    height: 2px;
+    flex: 1;
+    background: #555;
+  }
+
+  .glava-desno {
+    width: 0; height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 8px solid #555;
+  }
+
+  .glava-lijevo {
+    width: 0; height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-right: 8px solid #555;
+  }
+
+  .str-linija.lijevo { flex-direction: row-reverse; }
+
+  h2 {
+    font-size: 15px;
+    margin-bottom: 12px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 4px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 30px;
+  }
+
+  th {
+    background: #333;
+    color: #fff;
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 12px;
+  }
+
+  td {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    vertical-align: top;
+    line-height: 1.6;
+  }
+
+  tr:nth-child(even) td { background: #f5f5f5; }
+
+  .oznaka { font-weight: bold; white-space: nowrap; }
+
+  .formule {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .formula-box {
+    border: 1px solid #aaa;
+    border-radius: 6px;
+    padding: 10px 14px;
+    flex: 1;
+    min-width: 180px;
+    font-size: 12px;
+    line-height: 1.8;
+  }
+
+  .formula-box strong {
+    display: block;
+    font-size: 11px;
+    color: #555;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<h1>Arhitektura sistema – Kancelarijski senzor</h1>
+<p class="podnaslov">Zadatak 1 – Skica sistema i pravila protokola</p>
+
+<div class="arch">
+
+  <div class="blok">
+    <div class="blok-naslov">KLIJENT</div>
+    <div class="blok-sadrzaj">
+      <div>Čita CSV (110 redova)</div>
+      <div>Loguje nevalidne redove</div>
+      <div>StartSession(meta)</div>
+      <div>for → PushSample(row)</div>
+      <div>EndSession()</div>
+      <div>CsvReader : IDisposable</div>
+    </div>
+  </div>
+
+  <div class="strelice">
+    <div class="str">
+      <div class="str-linija">
+        <div class="linija"></div>
+        <div class="glava-desno"></div>
+      </div>
+      <span>poruke</span>
+    </div>
+    <div class="str">
+      <div class="str-linija lijevo">
+        <div class="linija"></div>
+        <div class="glava-lijevo"></div>
+      </div>
+      <span>ACK/NACK</span>
+    </div>
+  </div>
+
+  <div class="blok">
+    <div class="blok-naslov">WCF SERVIS</div>
+    <div class="blok-sadrzaj">
+      <div>net.tcp://localhost:9000</div>
+      <div>StartSession(SessionMeta)</div>
+      <div>PushSample(SensorSample)</div>
+      <div>EndSession()</div>
+      <div>Validacija podataka</div>
+      <div>DataFormatFault / ValidationFault</div>
+      <div>Analitika: ΔP, ΔCO, ΔNO2</div>
+      <div>Događaji (4 kom.)</div>
+      <div>SensorService : IDisposable</div>
+      <div>FileManager : IDisposable</div>
+    </div>
+  </div>
+
+  <div class="strelice">
+    <div class="str">
+      <div class="str-linija">
+        <div class="linija"></div>
+        <div class="glava-desno"></div>
+      </div>
+      <span>piše fajlove</span>
+    </div>
+    <div class="str">
+      <div class="str-linija lijevo">
+        <div class="linija"></div>
+        <div class="glava-lijevo"></div>
+      </div>
+      <span>čita config</span>
+    </div>
+  </div>
+
+  <div class="blok">
+    <div class="blok-naslov">DISK (SensorData/)</div>
+    <div class="blok-sadrzaj">
+      <div>measurements_session.csv</div>
+      <div>rejects.csv</div>
+      <div>app.config:</div>
+      <div>&nbsp;&nbsp;P_threshold = 5.0</div>
+      <div>&nbsp;&nbsp;CO_threshold = 50.0</div>
+      <div>&nbsp;&nbsp;NO2_threshold = 20.0</div>
+      <div>&nbsp;&nbsp;±25% od prosjeka</div>
+    </div>
+  </div>
+
+</div>
+
+<h2>Pravila protokola</h2>
+<table>
+  <tr>
+    <th width="18%">Pravilo</th>
+    <th>Opis</th>
+  </tr>
+  <tr>
+    <td class="oznaka">(a) Meta-zaglavlje</td>
+    <td>Svaka sesija počinje sa <strong>StartSession(meta)</strong> koji sadrži zaglavlje: <code>{ Volume, CO, NO2, Pressure, DateTime }</code></td>
+  </tr>
+  <tr>
+    <td class="oznaka">(b) Sekvencijalno slanje</td>
+    <td>Klijent prolazi <strong>for petljom</strong> kroz CSV i šalje <strong>po jedan red</strong> — svaki red je jedan <code>PushSample()</code> poziv</td>
+  </tr>
+  <tr>
+    <td class="oznaka">(c) Poruke</td>
+    <td><code>StartSession(meta)</code> → <code>PushSample(sample)</code> × 110 → <code>EndSession()</code></td>
+  </tr>
+  <tr>
+    <td class="oznaka">(d) Odgovori servera</td>
+    <td>
+      <strong>ACK + IN_PROGRESS</strong> — uzorak uspješno primljen<br>
+      <strong>NACK + IN_PROGRESS</strong> — uzorak odbijen (nevalidan)<br>
+      <strong>ACK + COMPLETED</strong> — sesija završena
+    </td>
+  </tr>
+  <tr>
+    <td class="oznaka">(e) Pragovi (app.config)</td>
+    <td>
+      <code>P_threshold</code>, <code>CO_threshold</code>, <code>NO2_threshold</code><br>
+      Spike događaj ako <code>|Δ| &gt; threshold</code><br>
+      OutOfBandWarning ako vrijednost &lt; 0.75·mean ili &gt; 1.25·mean
+    </td>
+  </tr>
+</table>
+
+<h2>Analitičke formule</h2>
+<div class="formule">
+  <div class="formula-box">
+    <strong>Pritisak – Zadatak 9</strong>
+    ΔP = P[n] − P[n−1]<br>
+    → PressureSpike ako |ΔP| &gt; P_threshold
+  </div>
+  <div class="formula-box">
+    <strong>CO – Zadatak 10</strong>
+    ΔCO = CO[n] − CO[n−1]<br>
+    → COSpike ako |ΔCO| &gt; CO_threshold
+  </div>
+  <div class="formula-box">
+    <strong>NO2 – Zadatak 10</strong>
+    ΔNO2 = NO2[n] − NO2[n−1]<br>
+    → NO2Spike ako |ΔNO2| &gt; NO2_threshold
+  </div>
+  <div class="formula-box">
+    <strong>Tekući prosjek (sva 3)</strong>
+    mean = Σval / n<br>
+    → OutOfBandWarning ako &lt; 0.75·mean ili &gt; 1.25·mean
+  </div>
+</div>
+
+</body>
+</html>
