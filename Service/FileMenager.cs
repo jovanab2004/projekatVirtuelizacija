@@ -16,9 +16,8 @@ namespace Service
         {
             string folder = AppDomain.CurrentDomain.BaseDirectory;
 
-            // Naziv fajla prema specifikaciji: measurements_session.csv
-            _measurementsPath = Path.Combine(folder, "measurements_session.csv");
-            _rejectsPath = Path.Combine(folder, "rejects.csv");
+            _measurementsPath = Path.Combine(folder, $"measurements_{sessionId}.csv");
+            _rejectsPath = Path.Combine(folder, $"rejects_{sessionId}.csv");
 
             _measurementsWriter = new StreamWriter(
                 new FileStream(_measurementsPath, FileMode.Create, FileAccess.Write));

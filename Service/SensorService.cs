@@ -77,6 +77,7 @@ namespace Service
             SensorDatabase.Measurements.Add(sample);
             _fileManager?.WriteMeasurement(sample);
 
+            Console.WriteLine();
             Console.WriteLine($"[PRENOS] prenos u toku... {sample}");
             SensorEvents.RaiseSampleReceived(sample);
 
@@ -104,7 +105,7 @@ namespace Service
             _fileManager?.Dispose();
             _fileManager = null;
 
-            Console.WriteLine("[PRENOS] završen prenos.");
+            Console.WriteLine("\n[PRENOS] završen prenos.");
             SensorEvents.RaiseTransferCompleted(sessionId);
 
             return new SampleResponse
